@@ -9,6 +9,7 @@ import Foundation
 
 enum LeanLocalizable: String {
     case title
+    case placeholder
 
     var localized: String {
         NSLocalizedString(rawValue, comment: "")

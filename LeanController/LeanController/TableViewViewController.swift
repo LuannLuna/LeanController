@@ -10,12 +10,41 @@ import CoreData
 
 class TableViewViewController: UITableViewController {
 
+    private typealias Strings = LeanLocalizable
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = LeanLocalizable.title.localized
+        title = Strings.title.localized
         initializeCoreData()
     }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView(
+            frame: CGRect(
+                x: 0,
+                y: 0,
+                width: UIScreen.main.bounds.width,
+                height: 44)
+        ).with {
+            $0.backgroundColor = .lightText
+        }
+        
+        let textField = UITextField(frame: view.frame).with {
+            $0.placeholder = Strings.placeholder.localized
+            $0.leftView = UIView().with {
+                $0.widthAnchor.constraint(equalToConstant: 10).isActive = true
+            }
+            $0.leftViewMode = .always
+        }
 
+        view.addSubview(textField)
+
+        return view
+    }
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        1
+    }
 }
 
 private

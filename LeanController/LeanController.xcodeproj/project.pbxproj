@@ -15,6 +15,8 @@
 		A4C5E7722BA5EA77003BDB1E /* MyGroceryDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A4C5E7702BA5EA77003BDB1E /* MyGroceryDataModel.xcdatamodeld */; };
 		A4C5E7742BA5EB73003BDB1E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A4C5E7732BA5EB73003BDB1E /* Localizable.xcstrings */; };
 		A4C5E7762BA5EDFA003BDB1E /* LeanLocalizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C5E7752BA5EDFA003BDB1E /* LeanLocalizable.swift */; };
+		A4C5E7792BA5EFDA003BDB1E /* Configurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C5E7782BA5EFDA003BDB1E /* Configurable.swift */; };
+		A4C5E77B2BA5F03B003BDB1E /* ViewCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C5E77A2BA5F03B003BDB1E /* ViewCodable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		A4C5E7712BA5EA77003BDB1E /* MyGroceryDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyGroceryDataModel.xcdatamodel; sourceTree = "<group>"; };
 		A4C5E7732BA5EB73003BDB1E /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		A4C5E7752BA5EDFA003BDB1E /* LeanLocalizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeanLocalizable.swift; sourceTree = "<group>"; };
+		A4C5E7782BA5EFDA003BDB1E /* Configurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configurable.swift; sourceTree = "<group>"; };
+		A4C5E77A2BA5F03B003BDB1E /* ViewCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCodable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,7 @@
 		A40B2E172BA4F18F00B169E3 /* LeanController */ = {
 			isa = PBXGroup;
 			children = (
+				A4C5E7772BA5EFCF003BDB1E /* Protocols */,
 				A40B2E182BA4F18F00B169E3 /* AppDelegate.swift */,
 				A40B2E1A2BA4F18F00B169E3 /* SceneDelegate.swift */,
 				A40B2E1C2BA4F18F00B169E3 /* TableViewViewController.swift */,
@@ -71,6 +76,15 @@
 				A4C5E7752BA5EDFA003BDB1E /* LeanLocalizable.swift */,
 			);
 			path = LeanController;
+			sourceTree = "<group>";
+		};
+		A4C5E7772BA5EFCF003BDB1E /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				A4C5E7782BA5EFDA003BDB1E /* Configurable.swift */,
+				A4C5E77A2BA5F03B003BDB1E /* ViewCodable.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -144,9 +158,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4C5E7792BA5EFDA003BDB1E /* Configurable.swift in Sources */,
 				A40B2E1D2BA4F18F00B169E3 /* TableViewViewController.swift in Sources */,
 				A40B2E192BA4F18F00B169E3 /* AppDelegate.swift in Sources */,
 				A4C5E7762BA5EDFA003BDB1E /* LeanLocalizable.swift in Sources */,
+				A4C5E77B2BA5F03B003BDB1E /* ViewCodable.swift in Sources */,
 				A40B2E1B2BA4F18F00B169E3 /* SceneDelegate.swift in Sources */,
 				A4C5E7722BA5EA77003BDB1E /* MyGroceryDataModel.xcdatamodeld in Sources */,
 			);
