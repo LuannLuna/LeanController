@@ -12,9 +12,9 @@ class TableViewViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = LeanLocalizable.title.localized
         initializeCoreData()
     }
-
 
 }
 
