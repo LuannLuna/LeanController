@@ -36,6 +36,7 @@ class TableViewViewController: UITableViewController {
             }
             $0.leftViewMode = .always
         }
+        textField.delegate = self
 
         view.addSubview(textField)
 
@@ -47,10 +48,27 @@ class TableViewViewController: UITableViewController {
     }
 }
 
+extension TableViewViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let managedObjectContext else { return false }
+        if let shoppingList = NSEntityDescription.insertNewObject(forEntityName: TokenKeys.shoppingList.rawValue, into: managedObjectContext.self) as? ShoppingList {
+            shoppingList.title = textField.text
+            do {
+                try managedObjectContext.save()
+            } catch {
+                print(error.localizedDescription); return false
+            }
+
+            return textField.resignFirstResponder()
+        }
+        return false
+    }
+}
+
 private
 extension TableViewViewController {
     func initializeCoreData() {
-        guard let modelURL = Bundle.main.url(forResource: "MyGroceryDataModel", withExtension: "momd") else {
+        guard let modelURL = Bundle.main.url(forResource: TokenKeys.dataModel.rawValue, withExtension: TokenKeys.momd.rawValue) else {
             print("GrocryDataModel not found"); return
         }
 
