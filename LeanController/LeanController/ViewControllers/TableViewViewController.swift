@@ -12,7 +12,7 @@ class TableViewViewController: UITableViewController {
 
     private typealias Strings = LeanLocalizable
 
-    var fetchResultController: NSFetchedResultsController<ShoppingList>?
+    var dataProvider: ShoppingListDataProvider?
     var managedObjectContext: NSManagedObjectContext?
 
     override func viewDidLoad() {
@@ -52,13 +52,13 @@ class TableViewViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sections = fetchResultController?.sections else { return 0 }
+        guard let sections = dataProvider?.sections else { return 0 }
         return sections[section].numberOfObjects
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = .init(style: .default, reuseIdentifier: "Cell")
-        let shoppingList = fetchResultController?.object(at: indexPath)
+        let shoppingList = dataProvider?.object(at: indexPath)
         cell.textLabel?.text = shoppingList?.title
 
         return cell
@@ -66,7 +66,7 @@ class TableViewViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if case .delete = editingStyle {
-            if let shoppingList = fetchResultController?.object(at: indexPath) {
+            if let shoppingList = dataProvider?.object(at: indexPath) {
                 managedObjectContext?.delete(shoppingList)
                 do {
                     try managedObjectContext?.save()
@@ -100,21 +100,7 @@ private
 extension TableViewViewController {
     func populateShoppingList() {
         guard let managedObjectContext else { return }
-        let request = NSFetchRequest<ShoppingList>(entityName: TokenKeys.shoppingList.rawValue)
-        request.sortDescriptors = [NSSortDescriptor(key: TokenKeys.title.rawValue, ascending: true)]
-
-        fetchResultController = NSFetchedResultsController(
-            fetchRequest: request,
-            managedObjectContext: managedObjectContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil
-        )
-        fetchResultController?.delegate = self
-        do {
-            try fetchResultController?.performFetch()
-        } catch {
-            print(error.localizedDescription)
-        }
+        dataProvider = ShoppingListDataProvider(managedObjectContext: managedObjectContext)
     }
 }
 
