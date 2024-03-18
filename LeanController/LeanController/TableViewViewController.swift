@@ -64,6 +64,20 @@ class TableViewViewController: UITableViewController {
 
         return cell
     }
+
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if case .delete = editingStyle {
+            if let shoppingList = fetchResultController?.object(at: indexPath) {
+                managedObjectContext?.delete(shoppingList)
+                do {
+                    try managedObjectContext?.save()
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+        tableView.isEditing = false
+    }
 }
 
 extension TableViewViewController: UITextFieldDelegate {
@@ -139,7 +153,12 @@ extension TableViewViewController {
 
 extension TableViewViewController: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<any NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        guard let newIndexPath else { return }
+        guard let newIndexPath else {
+            if let indexPath {
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            }
+            return
+        }
         tableView.insertRows(at: [newIndexPath], with: .automatic)
     }
 }
