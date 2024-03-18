@@ -12,6 +12,9 @@ class TableViewViewController: UITableViewController {
 
     private typealias Strings = LeanLocalizable
 
+    var fetchResultController: NSFetchedResultsController<ShoppingList>?
+    var managedObjectContext: NSManagedObjectContext?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = Strings.title.localized
@@ -84,14 +87,52 @@ extension TableViewViewController {
             print("Unable to get documents URL"); return
         }
 
-        let storeURL = documentsURL.appendingPathComponent("MyGrocery.sqlite")
+        let storeURL = documentsURL.appendingPathComponent(TokenKeys.sqlite.rawValue)
 
         print(storeURL)
 
-//        try! persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil)
-//
-//        let type = NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType
-//        self.managedObjectContext = NSManagedObjectContext(concurrencyType: type)
-//        self.managedObjectContext.persistentStoreCoordinator = persistentStoreCoordinator
+        do {
+            try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil)
+        } catch {
+            print(error.localizedDescription)
+        }
+
+        let type = NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType
+        managedObjectContext = NSManagedObjectContext(concurrencyType: type)
+        managedObjectContext?.persistentStoreCoordinator = persistentStoreCoordinator
+    }
+
+    func populateShoppingList() {
+        guard let managedObjectContext else { return }
+        let request = NSFetchRequest<ShoppingList>(entityName: TokenKeys.shoppingList.rawValue)
+        request.sortDescriptors = [NSSortDescriptor(key: TokenKeys.title.rawValue, ascending: true)]
+
+        fetchResultController = NSFetchedResultsController(
+            fetchRequest: request,
+            managedObjectContext: managedObjectContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+
+        do {
+            try fetchResultController?.performFetch()
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+}
+
+extension TableViewViewController: NSFetchedResultsControllerDelegate {
+
+}
+
+private
+extension TableViewViewController {
+    enum TokenKeys: String {
+        case shoppingList = "ShoppingList"
+        case dataModel = "MyGroceryDataModel"
+        case momd
+        case sqlite = "MyGrocery.sqlite"
+        case title
     }
 }
