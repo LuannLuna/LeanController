@@ -9,16 +9,12 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
+    var coreData: CoreDataManager?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let vc = TableViewViewController()
-        let nav = UINavigationController(rootViewController: vc)
-
-        let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = nav
-        self.window = window
-        window.makeKeyAndVisible()
+        self.window = initializeScene(windowScene: windowScene)
+        window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {}
@@ -31,4 +27,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneDidEnterBackground(_ scene: UIScene) {}
 
+}
+
+extension SceneDelegate {
+    func initializeScene(windowScene: UIWindowScene) -> UIWindow {
+        coreData = CoreDataManager()
+
+        let vc = TableViewViewController().with {
+            $0.managedObjectContext = coreData?.managedObjectContext
+        }
+        let nav = UINavigationController(rootViewController: vc)
+
+        return UIWindow(windowScene: windowScene).with {
+            $0.rootViewController = nav
+        }
+    }
 }

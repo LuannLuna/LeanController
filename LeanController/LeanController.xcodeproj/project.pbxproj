@@ -12,6 +12,8 @@
 		A40B2E1D2BA4F18F00B169E3 /* TableViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40B2E1C2BA4F18F00B169E3 /* TableViewViewController.swift */; };
 		A40B2E222BA4F19000B169E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A40B2E212BA4F19000B169E3 /* Assets.xcassets */; };
 		A40B2E252BA4F19000B169E3 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = A40B2E242BA4F19000B169E3 /* Base */; };
+		A4662E542BA8C2A600896446 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4662E532BA8C2A600896446 /* CoreDataManager.swift */; };
+		A4662E562BA8C35400896446 /* TokenKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4662E552BA8C35400896446 /* TokenKeys.swift */; };
 		A4C5E7722BA5EA77003BDB1E /* MyGroceryDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A4C5E7702BA5EA77003BDB1E /* MyGroceryDataModel.xcdatamodeld */; };
 		A4C5E7742BA5EB73003BDB1E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A4C5E7732BA5EB73003BDB1E /* Localizable.xcstrings */; };
 		A4C5E7762BA5EDFA003BDB1E /* LeanLocalizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C5E7752BA5EDFA003BDB1E /* LeanLocalizable.swift */; };
@@ -27,6 +29,8 @@
 		A40B2E212BA4F19000B169E3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A40B2E242BA4F19000B169E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A40B2E262BA4F19000B169E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A4662E532BA8C2A600896446 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		A4662E552BA8C35400896446 /* TokenKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenKeys.swift; sourceTree = "<group>"; };
 		A4C5E7712BA5EA77003BDB1E /* MyGroceryDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyGroceryDataModel.xcdatamodel; sourceTree = "<group>"; };
 		A4C5E7732BA5EB73003BDB1E /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		A4C5E7752BA5EDFA003BDB1E /* LeanLocalizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeanLocalizable.swift; sourceTree = "<group>"; };
@@ -64,10 +68,10 @@
 		A40B2E172BA4F18F00B169E3 /* LeanController */ = {
 			isa = PBXGroup;
 			children = (
+				A4662E522BA8C28D00896446 /* Classes */,
 				A4C5E7772BA5EFCF003BDB1E /* Protocols */,
-				A40B2E182BA4F18F00B169E3 /* AppDelegate.swift */,
-				A40B2E1A2BA4F18F00B169E3 /* SceneDelegate.swift */,
-				A40B2E1C2BA4F18F00B169E3 /* TableViewViewController.swift */,
+				A4662E502BA8C26E00896446 /* App */,
+				A4662E512BA8C28200896446 /* ViewControllers */,
 				A40B2E212BA4F19000B169E3 /* Assets.xcassets */,
 				A40B2E232BA4F19000B169E3 /* LaunchScreen.storyboard */,
 				A40B2E262BA4F19000B169E3 /* Info.plist */,
@@ -76,6 +80,32 @@
 				A4C5E7752BA5EDFA003BDB1E /* LeanLocalizable.swift */,
 			);
 			path = LeanController;
+			sourceTree = "<group>";
+		};
+		A4662E502BA8C26E00896446 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A40B2E182BA4F18F00B169E3 /* AppDelegate.swift */,
+				A40B2E1A2BA4F18F00B169E3 /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A4662E512BA8C28200896446 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				A40B2E1C2BA4F18F00B169E3 /* TableViewViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		A4662E522BA8C28D00896446 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				A4662E532BA8C2A600896446 /* CoreDataManager.swift */,
+				A4662E552BA8C35400896446 /* TokenKeys.swift */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		A4C5E7772BA5EFCF003BDB1E /* Protocols */ = {
@@ -160,10 +190,12 @@
 			files = (
 				A4C5E7792BA5EFDA003BDB1E /* Configurable.swift in Sources */,
 				A40B2E1D2BA4F18F00B169E3 /* TableViewViewController.swift in Sources */,
+				A4662E562BA8C35400896446 /* TokenKeys.swift in Sources */,
 				A40B2E192BA4F18F00B169E3 /* AppDelegate.swift in Sources */,
 				A4C5E7762BA5EDFA003BDB1E /* LeanLocalizable.swift in Sources */,
 				A4C5E77B2BA5F03B003BDB1E /* ViewCodable.swift in Sources */,
 				A40B2E1B2BA4F18F00B169E3 /* SceneDelegate.swift in Sources */,
+				A4662E542BA8C2A600896446 /* CoreDataManager.swift in Sources */,
 				A4C5E7722BA5EA77003BDB1E /* MyGroceryDataModel.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
