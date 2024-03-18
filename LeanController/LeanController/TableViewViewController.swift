@@ -19,6 +19,7 @@ class TableViewViewController: UITableViewController {
         super.viewDidLoad()
         title = Strings.title.localized
         initializeCoreData()
+        populateShoppingList()
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -30,6 +31,7 @@ class TableViewViewController: UITableViewController {
                 height: 44)
         ).with {
             $0.backgroundColor = .lightText
+            $0.heightAnchor.constraint(equalToConstant: 50).isActive = true
         }
         
         let textField = UITextField(frame: view.frame).with {
@@ -38,8 +40,8 @@ class TableViewViewController: UITableViewController {
                 $0.widthAnchor.constraint(equalToConstant: 10).isActive = true
             }
             $0.leftViewMode = .always
+            $0.delegate = self
         }
-        textField.delegate = self
 
         view.addSubview(textField)
 
@@ -48,6 +50,19 @@ class TableViewViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         1
+    }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let sections = fetchResultController?.sections else { return 0 }
+        return sections[section].numberOfObjects
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = .init(style: .default, reuseIdentifier: "Cell")
+        let shoppingList = fetchResultController?.object(at: indexPath)
+        cell.textLabel?.text = shoppingList?.title
+
+        return cell
     }
 }
 
@@ -61,7 +76,7 @@ extension TableViewViewController: UITextFieldDelegate {
             } catch {
                 print(error.localizedDescription); return false
             }
-
+            textField.text = nil
             return textField.resignFirstResponder()
         }
         return false
@@ -113,7 +128,7 @@ extension TableViewViewController {
             sectionNameKeyPath: nil,
             cacheName: nil
         )
-
+        fetchResultController?.delegate = self
         do {
             try fetchResultController?.performFetch()
         } catch {
@@ -123,7 +138,10 @@ extension TableViewViewController {
 }
 
 extension TableViewViewController: NSFetchedResultsControllerDelegate {
-
+    func controller(_ controller: NSFetchedResultsController<any NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        guard let newIndexPath else { return }
+        tableView.insertRows(at: [newIndexPath], with: .automatic)
+    }
 }
 
 private
