@@ -12,13 +12,23 @@ class TableViewViewController: UITableViewController {
 
     private typealias Strings = LeanLocalizable
 
-    var dataProvider: ShoppingListDataProvider?
-    var managedObjectContext: NSManagedObjectContext?
+    let dataProvider: ShoppingListDataProvider
+    let dataSource: ShoppingListDataSource
+
+    init(dataProvider: ShoppingListDataProvider, dataSource: ShoppingListDataSource) {
+        self.dataProvider = dataProvider
+        self.dataSource = dataSource
+        super.init(style: .plain)
+        tableView.dataSource = dataSource
+    }
+    
+    required init?(coder _: NSCoder) {
+        fatalError()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         title = Strings.title.localized
-        populateShoppingList()
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -46,72 +56,24 @@ class TableViewViewController: UITableViewController {
 
         return view
     }
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let sections = dataProvider?.sections else { return 0 }
-        return sections[section].numberOfObjects
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = .init(style: .default, reuseIdentifier: "Cell")
-        let shoppingList = dataProvider?.object(at: indexPath)
-        cell.textLabel?.text = shoppingList?.title
-
-        return cell
-    }
-
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if case .delete = editingStyle {
-            if let shoppingList = dataProvider?.object(at: indexPath) {
-                managedObjectContext?.delete(shoppingList)
-                do {
-                    try managedObjectContext?.save()
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-        }
-        tableView.isEditing = false
-    }
 }
 
 extension TableViewViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        guard let managedObjectContext else { return false }
-        if let shoppingList = NSEntityDescription.insertNewObject(forEntityName: TokenKeys.shoppingList.rawValue, into: managedObjectContext.self) as? ShoppingList {
+        if let shoppingList = NSEntityDescription.insertNewObject(
+            forEntityName: TokenKeys.shoppingList.rawValue,
+            into: dataProvider.fetchResultController.managedObjectContext.self
+        ) as? ShoppingList {
             shoppingList.title = textField.text
+
             do {
-                try managedObjectContext.save()
+                try dataProvider.fetchResultController.managedObjectContext.save()
             } catch {
-                print(error.localizedDescription); return false
+                fatalError(error.localizedDescription)
             }
             textField.text = nil
             return textField.resignFirstResponder()
         }
         return false
-    }
-}
-
-private
-extension TableViewViewController {
-    func populateShoppingList() {
-        guard let managedObjectContext else { return }
-        dataProvider = ShoppingListDataProvider(managedObjectContext: managedObjectContext)
-    }
-}
-
-extension TableViewViewController: NSFetchedResultsControllerDelegate {
-    func controller(_ controller: NSFetchedResultsController<any NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        guard let newIndexPath else {
-            if let indexPath {
-                tableView.deleteRows(at: [indexPath], with: .automatic)
-            }
-            return
-        }
-        tableView.insertRows(at: [newIndexPath], with: .automatic)
     }
 }

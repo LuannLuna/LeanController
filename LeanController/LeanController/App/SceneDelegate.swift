@@ -9,7 +9,6 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-    var coreData: CoreDataManager?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -31,13 +30,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 extension SceneDelegate {
     func initializeScene(windowScene: UIWindowScene) -> UIWindow {
-        coreData = CoreDataManager()
+        let coreData = CoreDataManager()
+        let provider = ShoppingListDataProvider(managedObjectContext: coreData.managedObjectContext)
+        let dataSource = ShoppingListDataSource(
+            dataProvider: provider, managedObjectContext:
+                coreData.managedObjectContext
+        )
+        let vc = TableViewViewController(
+            dataProvider: provider,
+            dataSource: dataSource
+        )
+        dataSource.tableView = vc.tableView
 
-        let vc = TableViewViewController().with {
-            $0.managedObjectContext = coreData?.managedObjectContext
-        }
         let nav = UINavigationController(rootViewController: vc)
-
         return UIWindow(windowScene: windowScene).with {
             $0.rootViewController = nav
         }

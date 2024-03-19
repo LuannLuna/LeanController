@@ -9,20 +9,15 @@ import CoreData
 
 class CoreDataManager {
 
-    var managedObjectContext: NSManagedObjectContext?
+    var managedObjectContext: NSManagedObjectContext
 
     init() {
-        initializeCoreData()
-    }
-
-    private
-    func initializeCoreData() {
         guard let modelURL = Bundle.main.url(forResource: TokenKeys.dataModel.rawValue, withExtension: TokenKeys.momd.rawValue) else {
-            print("GrocryDataModel not found"); return
+            fatalError("GrocryDataModel not found")
         }
 
         guard let managedObjectModel = NSManagedObjectModel(contentsOf: modelURL) else {
-            print("Unable to initialize ManagedObjectModel"); return
+            fatalError("Unable to initialize ManagedObjectModel")
         }
 
         let persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
@@ -30,7 +25,7 @@ class CoreDataManager {
         let fileManager = FileManager()
 
         guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            print("Unable to get documents URL"); return
+            fatalError("Unable to get documents URL")
         }
 
         let storeURL = documentsURL.appendingPathComponent(TokenKeys.sqlite.rawValue)
@@ -40,11 +35,12 @@ class CoreDataManager {
         do {
             try persistentStoreCoordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: nil)
         } catch {
-            print(error.localizedDescription)
+            fatalError(error.localizedDescription)
         }
 
         let type = NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType
-        managedObjectContext = NSManagedObjectContext(concurrencyType: type)
-        managedObjectContext?.persistentStoreCoordinator = persistentStoreCoordinator
+        managedObjectContext = NSManagedObjectContext(concurrencyType: type).with {
+            $0.persistentStoreCoordinator = persistentStoreCoordinator
+        }
     }
 }

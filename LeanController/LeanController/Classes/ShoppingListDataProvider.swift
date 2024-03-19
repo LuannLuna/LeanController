@@ -7,12 +7,19 @@
 
 import CoreData
 
+protocol ShoppingListDataProviderDelegate: AnyObject {
+    func shoppingListDataProviderDidInsert(indexPath: IndexPath)
+    func shoppingListDataProviderDidDelete(indexPath: IndexPath)
+}
+
 class ShoppingListDataProvider: NSObject {
     let fetchResultController: NSFetchedResultsController<ShoppingList>
-
+    
     var sections: [NSFetchedResultsSectionInfo]? {
         fetchResultController.sections
     }
+
+    weak var delegate: ShoppingListDataProviderDelegate?
 
     init(managedObjectContext: NSManagedObjectContext) {
         let request = NSFetchRequest<ShoppingList>(entityName: TokenKeys.shoppingList.rawValue)
@@ -29,7 +36,7 @@ class ShoppingListDataProvider: NSObject {
         do {
             try fetchResultController.performFetch()
         } catch {
-            print(error.localizedDescription)
+            fatalError(error.localizedDescription)
         }
     }
 
@@ -39,5 +46,13 @@ class ShoppingListDataProvider: NSObject {
 }
 
 extension ShoppingListDataProvider: NSFetchedResultsControllerDelegate {
-
+    func controller(_ controller: NSFetchedResultsController<any NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        guard let newIndexPath else {
+            if let indexPath {
+                delegate?.shoppingListDataProviderDidDelete(indexPath: indexPath)
+            }
+            return
+        }
+        delegate?.shoppingListDataProviderDidInsert(indexPath: newIndexPath)
+    }
 }
