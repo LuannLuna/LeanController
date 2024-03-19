@@ -32,29 +32,10 @@ class TableViewViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView(
-            frame: CGRect(
-                x: 0,
-                y: 0,
-                width: UIScreen.main.bounds.width,
-                height: 44)
-        ).with {
-            $0.backgroundColor = .lightText
-            $0.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        return AddNewItemView().with {
+            $0.setup()
+            $0.setupView(placeholder: Strings.placeholder.localized, delegate: self)
         }
-        
-        let textField = UITextField(frame: view.frame).with {
-            $0.placeholder = Strings.placeholder.localized
-            $0.leftView = UIView().with {
-                $0.widthAnchor.constraint(equalToConstant: 10).isActive = true
-            }
-            $0.leftViewMode = .always
-            $0.delegate = self
-        }
-
-        view.addSubview(textField)
-
-        return view
     }
 }
 
