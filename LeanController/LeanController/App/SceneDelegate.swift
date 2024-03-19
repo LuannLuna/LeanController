@@ -32,10 +32,8 @@ extension SceneDelegate {
     func initializeScene(windowScene: UIWindowScene) -> UIWindow {
         let coreData = CoreDataManager()
         let provider = ShoppingListDataProvider(managedObjectContext: coreData.managedObjectContext)
-        let dataSource = ShoppingListDataSource(
-            dataProvider: provider, managedObjectContext:
-                coreData.managedObjectContext
-        )
+        let dataSource = ShoppingListDataSource(dataProvider: provider)
+
         let vc = TableViewViewController(
             dataProvider: provider,
             dataSource: dataSource

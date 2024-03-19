@@ -10,13 +10,11 @@ import CoreData
 
 class ShoppingListDataSource: NSObject, UITableViewDataSource {
 
-    var dataProvider: ShoppingListDataProvider
-    var managedObjectContext: NSManagedObjectContext
+    let dataProvider: ShoppingListDataProvider
     var tableView: UITableView?
 
-    init(dataProvider: ShoppingListDataProvider, managedObjectContext: NSManagedObjectContext) {
+    init(dataProvider: ShoppingListDataProvider) {
         self.dataProvider = dataProvider
-        self.managedObjectContext = managedObjectContext
         super.init()
         dataProvider.delegate = self
     }
@@ -37,9 +35,9 @@ class ShoppingListDataSource: NSObject, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if case .delete = editingStyle {
             let shoppingList = dataProvider.object(at: indexPath)
-            managedObjectContext.delete(shoppingList)
+            dataProvider.fetchResultController.managedObjectContext.delete(shoppingList)
             do {
-                try managedObjectContext.save()
+                try dataProvider.fetchResultController.managedObjectContext.save()
             } catch {
                 fatalError(error.localizedDescription)
             }
